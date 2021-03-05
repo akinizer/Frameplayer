@@ -4,5 +4,5 @@ Language: JS, HTML, CSS
 Usage:
 	* run html file
 	* click on the frame to start, play and pause features
-	* click on a point to change frames manually
+	* click on a moment or slide through the bar to change frames manually
 	
