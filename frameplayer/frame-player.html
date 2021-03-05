@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<title>Video Player</title>
+
+<header><h1>Video Player</h1><header>
+
+<script type="text/javascript" src="frame-player.js"></script> 
+<script type="module" src="frame-player.html"></script>
+<script>
+
+//localhost address and global variables
+var imgUrl = "http://localhost/JavascriptAssignment/images/";
+
+var full = "http://localhost/JavascriptAssignment/";
+
+var imgList = [];	
+
+var isPlay=1, isDone=0;
+
+let increment=0;
+
+</script>
+
+<script>
+//progress bar sliding operations
+function barAction(){
+	document.getElementById('myProgress').addEventListener('click', function (e) {
+    var x = e.pageX - this.offsetLeft, // or e.offsetX (less support, though)
+        y = e.pageY - this.offsetTop,  // or e.offsetY
+        clickedValue = x * this.max / this.offsetWidth,
+        isClicked = clickedValue <= this.value;
+		
+		this.style.width=e.pageX;
+		document.getElementById('myBar').style.width=((e.pageX / 673)*100 + "%");
+		document.getElementById('video').src=imgList[Math.round((e.pageX / 673)*7)];
+		document.getElementById('myBar').innerHTML=Math.round((e.pageX / 673)*7);
+		increment = document.getElementById('myBar').innerHTML;
+	});
+	
+
+}
+</script>
+
+
+
+<script>
+//export
+export let exportId = document.getElementById('video').id;
+localStorage.setItem("myKey","somestring");
+
+</script>
+
+<div class="videoframe" style="width:640px;height:360px;" onclick="videoAction()" >
+	<img id="video" src="https://pbs.twimg.com/profile_images/1075391803782778880/sADdEet4.jpg" alt=""  />
+</div>
+
+<div id="myProgress" style="margin-top:10px;"><script>document.getElementById('myProgress').style.width="33.6%"</script>
+  <div id="myBar" onclick="barAction()" ondrag="barAction()" style="background-color:#1e90ff" ><script>document.getElementById('myBar').style.width="0%"</script></div> 
+</div>
+
+
+<script>
+
+
+
+function videoAction(){
+	// if video stops, let it start over on click
+	if(increment!=7)
+		isPlay = isPlay ? false : true;
+	
+	//frame order
+	increment=increment%7;
+	
+	//if paused or stopped, let it play
+	if(isPlay) 
+		play();
+}
+
+//video and bar update function based on frame action and time
+async function play() {
+	var fps = 5;
+	
+	//loop through frames
+	for (;increment<7;increment++) {
+		//while playable
+		if (isPlay) {
+			//update video player and progress bar contents
+			document.getElementById("video").src = imgList[increment%7];
+			document.getElementById("myBar").style.width = ((increment%7 + 1)/7)*100 + "%";
+			document.getElementById("myBar").innerHTML = increment%7 + 1;
+
+			//halt execution for 10fps
+			await delay(1000/fps);
+		} 
+		//when done or paused, stop
+		else {
+			break;
+		}
+
+	}
+  
+}	
+
+//delay function for processes
+function delay(ms) {
+  // will resolve after ms milliseconds
+  return new Promise(r => setTimeout(r, ms));
+}	
+</script>
+
+
+
+
+<script>
+//functions
+function show_image(src, width, height, alt) {
+	var img = document.createElement("img");
+	img.src = src;
+	img.width = width;
+	img.height = height;
+	img.alt = alt;
+
+	// This next line will just add it to the <body> tag
+	document.body.appendChild(img);
+}
+
+function loadImg(){
+	for(i=0;i<7;i++){
+		var img = imgUrl + i + ".jpg";
+		imgList.push(img);
+	}
+}
+
+function printAllImg(){
+	var height = 640;
+	var width= 360;
+	for(i=0;i<7;i++){
+		show_image(imgList[i],height,width,"");
+		if(i%2==0){
+			document.write(" ");
+		}
+		else{
+			document.write("<br><br>");
+		}
+		
+	}
+}
+
+
+
+function progressUpdate(){
+	document.getElementById('myBar').addEventListener('click', function (e) {
+		var x = e.pageX - this.offsetLeft;
+		var percent = x * this.max / this.offsetWidth;
+		
+	});
+
+}
+
+</script>
+
+<script>
+///main
+
+loadImg();
+
+play();
+
+var htmlid = document.getElementById("video").id;
+
+</script>
+
+<style>
+#myProgress {
+  width: 100%;
+  background-color: #ddd;
+}
+
+#myBar {
+  width: 10%;
+  height: 30px;
+  background-color: #4CAF50;
+  text-align: center;
+  line-height: 30px;
+  color: white;
+}
+
+</style>	
+
+</html>
